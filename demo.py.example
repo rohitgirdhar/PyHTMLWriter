@@ -1,37 +1,21 @@
-import sys, os
-sys.path.append('/exports/cyclops/software/utils/PyHTMLWriter/src');
+import sys
+sys.path.append('/PATH/TO/HTMLWRITER/src');
 from Element import Element
 from TableRow import TableRow
 from Table import Table
 from TableWriter import TableWriter
 
 t = Table()
-imgs_link = 'http://10.3.2.61/~ubuntu/projects/001_backpage/dataset/corpus/'
-testListFile = open('/exports/cyclops/work/003_Backpage/dataset/backpage/TestSet.txt')
-resDir = '.'
-test = testListFile.readlines()
-testListFile.close()
-
-r = TableRow(isHeader = True)
-r.addElement(Element('Query'))
-r.addElement(Element('Matches...'))
-t.addRow(r)
-
-for ts in test:
-    r = TableRow()
-    e = Element()
-    e.addImg(os.path.join(imgs_link, ts))
-    r.addElement(e)
-    ts_path, _ = os.path.splitext(ts.strip())
-    resFile = open(os.path.join(resDir, ts_path, 'top.txt'))
-    matches = resFile.readlines()[1:10]
-    for match in matches:
+for r in range(100):
+    if r == 0:
+        r = TableRow(isHeader = True)
+    else:
+        r = TableRow()
+    for e in range(10):
         e = Element()
-        e.addImg(os.path.join(imgs_link.strip(), match.strip()))
+        e.addTxt('hello')
         r.addElement(e)
-    resFile.close()
     t.addRow(r)
-tw = TableWriter(t, '004_BoWResults', rowsPerPage=30)
+tw = TableWriter(t, 'out')
 tw.write()
-
 

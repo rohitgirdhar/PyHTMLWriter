@@ -1,8 +1,7 @@
 class TableRow:
-    elements = []
-    isHeader = False
     def __init__(self, isHeader = False):
         self.isHeader = isHeader
+        self.elements = []
     def addElement(self, element):
         self.elements.append(element)
     def getHTML(self):

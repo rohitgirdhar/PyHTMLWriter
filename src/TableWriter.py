@@ -3,9 +3,6 @@ from Table import Table
 import errno
 
 class TableWriter:
-    outputdir = 'html'
-    rowsPerPage = 20
-    table = Table()
     def __init__(self, table, outputdir, rowsPerPage = 20):
         self.outputdir = outputdir
         self.rowsPerPage = rowsPerPage

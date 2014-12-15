@@ -1,6 +1,4 @@
 class Table:
-    headerRows = []
-    rows = []
     def __init__(self, rows = []):
         self.rows = [row for row in rows if not row.isHeader]
         self.headerRows = [row for row in rows if row.isHeader]

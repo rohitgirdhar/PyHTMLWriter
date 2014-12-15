@@ -7,5 +7,5 @@ Implemented in Python for more portability.
 
 Usage
 -----
-- Read `src/Main.py` for usage example
+See `demo.py` for usage example
 

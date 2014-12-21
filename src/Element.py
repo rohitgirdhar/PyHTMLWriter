@@ -12,7 +12,9 @@ class Element:
         self.htmlCode += self.imgToHTML(img_path, width)
 
     def addTxt(self, txt):
-        self.htmlCode += txt
+        if self.htmlCode: # not empty
+                self.htmlCode += '<br />'
+        self.htmlCode += str(txt)
 
     def getHTML(self):
         return self.htmlCode

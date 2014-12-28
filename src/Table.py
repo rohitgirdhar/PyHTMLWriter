@@ -1,4 +1,6 @@
 import csv
+import os
+import inspect
 from Element import Element
 from TableRow import TableRow
 
@@ -11,11 +13,13 @@ class Table:
             self.rows.append(row)
         else:
             self.headerRows.append(row)
-    def getHTML(self):
-        html = '<table border=1>'
+    def getHTML(self, makeChart = False):
+        html = '<table border=1 id="data">'
         for r in self.headerRows + self.rows:
             html += r.getHTML()
         html += '</table>'
+        if makeChart:
+            html += self.genChart()
         return html
     def readFromCSV(self, fpath):
         with open(fpath) as f:
@@ -27,4 +31,15 @@ class Table:
                 self.addRow(tr)
     def countRows(self):
         return len(self.rows)
+    def genChart(self):
+        # Generate HighCharts.com chart using the table
+        # data. Assumes that data is numeric, and first row
+        # and the first column are headers
+        for row in self.rows:
+            row.elements[0].setIsHeader()
+        scrdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+        f = open(os.path.join(scrdir, '../templates/highchart_js.html'))
+        base_js =  f.read()
+        f.close()
+        return base_js
 

@@ -3,6 +3,7 @@ class Element:
 
     def __init__(self, htmlCode = ""):
         self.htmlCode = htmlCode
+        self.isHeader = False
 
     @staticmethod
     def imgToHTML(img_path, width = 200):
@@ -18,4 +19,7 @@ class Element:
 
     def getHTML(self):
         return self.htmlCode
+
+    def setIsHeader(self):
+        self.isHeader = True
 

@@ -36,6 +36,8 @@ class TableWriter:
             else: raise
     @staticmethod
     def getPageLinks(nPages, curPage, pgListBreak):
+        if nPages < 2:
+            return ''
         links = ''
         for i in range(1, nPages + 1):
             if not i == curPage:

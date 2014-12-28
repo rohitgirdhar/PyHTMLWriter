@@ -35,7 +35,7 @@ class TableWriter:
             else: raise
     @staticmethod
     def getPageLinks(nPages, curPage, pgListBreak):
-        links = ""
+        links = ''
         for i in range(1, nPages + 1):
             if not i == curPage:
                 links += '<a href="' + str(i) + '.html">' + str(i) + '</a>&nbsp'
@@ -43,5 +43,5 @@ class TableWriter:
                 links += str(i) + '&nbsp'
             if (i % pgListBreak == 0):
                 links += '<br />'
-        return links
+        return '\n' + links + '\n'
 

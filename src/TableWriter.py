@@ -3,12 +3,13 @@ from Table import Table
 import errno
 
 class TableWriter:
-    def __init__(self, table, outputdir, rowsPerPage = 20, pgListBreak = 20, makeChart = False):
+    def __init__(self, table, outputdir, rowsPerPage = 20, pgListBreak = 20, makeChart = False, desc=''):
         self.outputdir = outputdir
         self.rowsPerPage = rowsPerPage
         self.table = table
         self.pgListBreak = pgListBreak
         self.makeChart = makeChart
+        self.desc = desc
     def write(self):
         self.mkdir_p(self.outputdir)
         nRows = self.table.countRows()
@@ -21,6 +22,7 @@ class TableWriter:
                     pgCounter, self.pgListBreak)
             
             f.write(pgLinks)
+            f.write('<p>' + self.desc + '</p>')
             f.write(t.getHTML(makeChart = self.makeChart))
             f.write(pgLinks)
             

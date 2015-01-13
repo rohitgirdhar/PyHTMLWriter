@@ -6,10 +6,18 @@ class Element:
     def __init__(self, htmlCode = ""):
         self.htmlCode = htmlCode
         self.isHeader = False
+        self.drawCheck = False
+        self.drawUnCheck = False
 
-    @staticmethod
-    def imgToHTML(img_path, width = 200):
-        return '<img src="' + img_path.strip().lstrip() + '" width="' + str(width) + 'px" />'
+    def imgToHTML(self, img_path, width = 200):
+        res = '<img src="' + img_path.strip().lstrip() + '" width="' + str(width) + 'px" '
+        if self.drawCheck:
+            res += 'style="border: 10px solid green"'
+        if self.drawUnCheck:
+            res += 'style="border: 10px solid red"'
+        res += '/>'
+        return res
+
     def imgToBboxHTML(self, img_path, bbox):
         idd = "img_" + ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
         return """
@@ -42,4 +50,10 @@ class Element:
 
     def setIsHeader(self):
         self.isHeader = True
+
+    def setDrawCheck(self):
+        self.drawCheck = True
+    
+    def setDrawUnCheck(self):
+        self.drawUnCheck = True
 

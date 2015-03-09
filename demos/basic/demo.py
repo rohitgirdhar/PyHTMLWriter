@@ -6,11 +6,11 @@ from Table import Table
 from TableWriter import TableWriter
 
 t = Table()
-for r in range(100):
-    if r == 0:
+for i in range(100):
+    if i == 0:
         r = TableRow(isHeader = True)
     else:
-        r = TableRow()
+        r = TableRow(rno = i)
     for e in range(10):
         e = Element()
         e.setDrawCheck()

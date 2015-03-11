@@ -1,5 +1,5 @@
 import sys
-sys.path.append('/home/rohit/Software/utils/PyHTMLWriter/src');
+sys.path.append('/media/data-nix/work/side/PyHTMLWriter/src');
 from Element import Element
 from TableRow import TableRow
 from Table import Table
@@ -14,7 +14,7 @@ for i in range(100):
     for e in range(10):
         e = Element()
         e.setDrawCheck()
-        e.addImg('http://rack.2.mshcdn.com/media/ZgkyMDE0LzAzLzMxL2UxL2VpZmZlbHRvd2VyLjYwMmIyLmpwZwpwCXRodW1iCTk1MHg1MzQjCmUJanBn/fe683380/ba4/eiffeltower.jpg')
+        e.addImg('../eiffeltower.jpg', bboxes=[[900,500,50,34],[100,100,100,100]])
         r.addElement(e)
     t.addRow(r)
 tw = TableWriter(t, 'out')

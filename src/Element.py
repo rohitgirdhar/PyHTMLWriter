@@ -61,11 +61,12 @@ class Element:
         """
         return htmlCode
     
-    def addImg(self, img_path, width = 200, bbox=None, imsize=None):
+    def addImg(self, img_path, width = 200, bboxes=None, imsize=None):
+        # bboxes must be a list of [x,y,w,h] (i.e. a list of lists)
         # imsize is the natural size of image at img_path.. used for putting bboxes, not required otherwise
         # even if it's not provided, I'll try to figure it out -- using the typical use cases of this software
-        if bbox:
-            self.htmlCode += self.imgToBboxHTML(img_path, bbox, 'green', 300, 300, imsize)
+        if bboxes:
+            self.htmlCode += self.imgToBboxHTML(img_path, bboxes, 'green', width, width, imsize)
         else:
             self.htmlCode += self.imgToHTML(img_path, width)
 

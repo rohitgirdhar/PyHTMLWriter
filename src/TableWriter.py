@@ -25,7 +25,7 @@ class TableWriter:
             f.write('<p>' + self.desc + '</p>')
             f.write(t.getHTML(makeChart = self.makeChart))
             f.write(pgLinks)
-            
+            f.write(self.getCredits())
             f.close()
             pgCounter += 1
     @staticmethod
@@ -49,4 +49,6 @@ class TableWriter:
             if (i % pgListBreak == 0):
                 links += '<br />'
         return '\n' + links + '\n'
-
+    @staticmethod
+    def getCredits():
+        return '\n<br/><div align="center"><small>Generated using <a href="https://github.com/rohitgirdhar/PyHTMLWriter">PyHTMLWriter</a></small></div>'

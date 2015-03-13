@@ -30,7 +30,7 @@ class Table:
                     if scale == 1.0:
                         tr.addElement(Element(elt))
                     else:
-                        tr.addelement(Element(str(float(elt) * scale)))
+                        tr.addElement(Element(str(float(elt) * scale)))
                 self.addRow(tr)
     def countRows(self):
         return len(self.rows)

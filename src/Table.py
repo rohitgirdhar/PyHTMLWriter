@@ -21,13 +21,16 @@ class Table:
         if makeChart:
             html += self.genChart()
         return html
-    def readFromCSV(self, fpath):
+    def readFromCSV(self, fpath, scale=1.0):
         with open(fpath) as f:
             tablereader = csv.reader(f)
             for row in tablereader:
                 tr = TableRow()
                 for elt in row:
-                    tr.addElement(Element(elt))
+                    if scale == 1.0
+                        tr.addElement(Element(elt))
+                    else:
+                        tr.addelement(Element(str(float(elt) * scale)))
                 self.addRow(tr)
     def countRows(self):
         return len(self.rows)

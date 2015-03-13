@@ -27,7 +27,7 @@ class Table:
             for row in tablereader:
                 tr = TableRow()
                 for elt in row:
-                    if scale == 1.0
+                    if scale == 1.0:
                         tr.addElement(Element(elt))
                     else:
                         tr.addelement(Element(str(float(elt) * scale)))

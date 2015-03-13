@@ -27,10 +27,10 @@ class Table:
             for row in tablereader:
                 tr = TableRow()
                 for elt in row:
-                    if scale == 1.0:
-                        tr.addElement(Element(elt))
-                    else:
+                    try:
                         tr.addElement(Element(str(float(elt) * scale)))
+                    except:
+                        tr.addElement(Element(elt))
                 self.addRow(tr)
     def countRows(self):
         return len(self.rows)

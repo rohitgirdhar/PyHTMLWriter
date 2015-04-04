@@ -12,12 +12,15 @@ class Element:
         self.drawCheck = False
         self.drawUnCheck = False
 
-    def imgToHTML(self, img_path, width = 200):
+    def imgToHTML(self, img_path, width = 200, overlay_path=None):
         res = '<img src="' + img_path.strip().lstrip() + '" width="' + str(width) + 'px" '
         if self.drawCheck:
-            res += 'style="border: 10px solid green"'
+            res += 'style="border: 10px solid green" '
         if self.drawUnCheck:
-            res += 'style="border: 10px solid red"'
+            res += 'style="border: 10px solid red" '
+        if overlay_path:
+          res += 'onmouseover="this.src=\'' + overlay_path.strip().lstrip() + '\';"'
+          res += 'onmouseout="this.src=\'' + img_path.strip().lstrip() + '\';"'
         res += '/>'
         return res
 
@@ -61,14 +64,16 @@ class Element:
         """
         return htmlCode
     
-    def addImg(self, img_path, width = 200, bboxes=None, imsize=None):
+    def addImg(self, img_path, width = 200, bboxes=None, imsize=None, overlay_path=None):
         # bboxes must be a list of [x,y,w,h] (i.e. a list of lists)
         # imsize is the natural size of image at img_path.. used for putting bboxes, not required otherwise
         # even if it's not provided, I'll try to figure it out -- using the typical use cases of this software
+        # overlay_path is image I want to show on mouseover
         if bboxes:
+            # TODO overlay path not implemented yet for canvas image
             self.htmlCode += self.imgToBboxHTML(img_path, bboxes, 'green', width, width, imsize)
         else:
-            self.htmlCode += self.imgToHTML(img_path, width)
+            self.htmlCode += self.imgToHTML(img_path, width, overlay_path)
 
     def addTxt(self, txt):
         if self.htmlCode: # not empty

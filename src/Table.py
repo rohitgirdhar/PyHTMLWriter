@@ -1,6 +1,7 @@
 import csv
 import os
 import inspect
+import string
 from Element import Element
 from TableRow import TableRow
 
@@ -13,13 +14,13 @@ class Table:
             self.rows.append(row)
         else:
             self.headerRows.append(row)
-    def getHTML(self, makeChart = False):
+    def getHTML(self, makeChart = False, transposeTableForChart = False):
         html = '<table border=1 id="data">'
         for r in self.headerRows + self.rows:
             html += r.getHTML()
         html += '</table>'
         if makeChart:
-            html += self.genChart()
+            html += self.genChart(transposeTable=transposeTableForChart)
         return html
     def readFromCSV(self, fpath, scale=1.0):
         with open(fpath) as f:
@@ -34,7 +35,7 @@ class Table:
                 self.addRow(tr)
     def countRows(self):
         return len(self.rows)
-    def genChart(self):
+    def genChart(self, transposeTable=False):
         # Generate HighCharts.com chart using the table
         # data. Assumes that data is numeric, and first row
         # and the first column are headers
@@ -42,7 +43,7 @@ class Table:
             row.elements[0].setIsHeader()
         scrdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
         f = open(os.path.join(scrdir, '../templates/highchart_js.html'))
-        base_js =  f.read()
+        base_js =  string.Template(f.read()).safe_substitute({'transpose': 'true'} if transposeTable else {'transpose': 'false'})
         f.close()
         return base_js
 

@@ -8,7 +8,8 @@
 $(function () {
     $('#container').highcharts({
         data: {
-            table: document.getElementById('data')
+            table: document.getElementById('data'),
+            switchRowsAndColumns: $transpose
         },
         chart: {
             height: 650,

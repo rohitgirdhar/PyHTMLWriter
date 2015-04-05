@@ -44,8 +44,12 @@ class Element:
 
         for i in range(len(bboxes)):
             bboxes[i] = [bboxes[i][0] * ratioX, bboxes[i][1] * ratioY, bboxes[i][2] * ratioX, bboxes[i][3] * ratioY]
+        colStr = ''
+        if self.drawCheck or self.drawUnCheck:
+            col = 'green' if self.drawCheck else 'red'
+            colStr = 'border: 10px solid ' + col + ';'
         htmlCode = """
-            <canvas id=""" + idd + """ style="border:1px solid #d3d3d3;
+            <canvas id=""" + idd + """ style="border:1px solid #d3d3d3; """ + colStr + """
                 background-image: url(""" + img_path + """);
                 background-repeat: no-repeat;
                 background-size: contain;"

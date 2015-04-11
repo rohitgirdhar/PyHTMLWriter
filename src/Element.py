@@ -95,7 +95,12 @@ class Element:
     
     def setDrawUnCheck(self):
         self.drawUnCheck = True
- 
+
+    @staticmethod
+    def getImSize(impath):
+        im = Image.open(impath)
+        return im.size
+
     @staticmethod
     def tryComputeImgDim(impath):
         try:
@@ -108,9 +113,7 @@ class Element:
             # most HACKY way to do this, remove the first '../'
             # since most cases
             impath2 = impath[3:]
-            im = Image.open(impath2)
-            res = im.size
-            return res
+            return self.getImSize(impath2)
         except:
             pass
         try:

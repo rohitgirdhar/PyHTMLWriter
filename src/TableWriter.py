@@ -3,7 +3,7 @@ from Table import Table
 import errno
 
 class TableWriter:
-    def __init__(self, table, outputdir, rowsPerPage = 20, pgListBreak = 20, makeChart = False, desc='', transposeTableForChart=False):
+    def __init__(self, table, outputdir, rowsPerPage = 20, pgListBreak = 20, makeChart = False, desc='', transposeTableForChart=False, chartType='line'):
         self.outputdir = outputdir
         self.rowsPerPage = rowsPerPage
         self.table = table
@@ -11,6 +11,7 @@ class TableWriter:
         self.makeChart = makeChart
         self.desc = desc
         self.transposeTableForChart = transposeTableForChart  # used in genCharts
+        self.chartType = chartType # used in genCharts
     def write(self):
         self.mkdir_p(self.outputdir)
         nRows = self.table.countRows()
@@ -24,7 +25,7 @@ class TableWriter:
             
             f.write(pgLinks)
             f.write('<p>' + self.desc + '</p>')
-            f.write(t.getHTML(makeChart = self.makeChart, transposeTableForChart=self.transposeTableForChart))
+            f.write(t.getHTML(makeChart = self.makeChart, transposeTableForChart=self.transposeTableForChart, chartType = self.chartType))
             f.write(pgLinks)
             f.write(self.getCredits())
             f.close()

@@ -14,13 +14,13 @@ class Table:
             self.rows.append(row)
         else:
             self.headerRows.append(row)
-    def getHTML(self, makeChart = False, transposeTableForChart = False):
+    def getHTML(self, makeChart = False, transposeTableForChart = False, chartType = 'line'):
         html = '<table border=1 id="data">'
         for r in self.headerRows + self.rows:
             html += r.getHTML()
         html += '</table>'
         if makeChart:
-            html += self.genChart(transposeTable=transposeTableForChart)
+            html += self.genChart(transposeTable=transposeTableForChart, chartType = chartType)
         return html
     def readFromCSV(self, fpath, scale=1.0):
         with open(fpath) as f:
@@ -35,7 +35,7 @@ class Table:
                 self.addRow(tr)
     def countRows(self):
         return len(self.rows)
-    def genChart(self, transposeTable=False):
+    def genChart(self, transposeTable=False, chartType = 'line'):
         # Generate HighCharts.com chart using the table
         # data. Assumes that data is numeric, and first row
         # and the first column are headers
@@ -43,7 +43,9 @@ class Table:
             row.elements[0].setIsHeader()
         scrdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
         f = open(os.path.join(scrdir, '../templates/highchart_js.html'))
-        base_js =  string.Template(f.read()).safe_substitute({'transpose': 'true'} if transposeTable else {'transpose': 'false'})
+        base_js = f.read()
         f.close()
+        base_js =  string.Template(base_js).safe_substitute({'transpose': 'true'} if transposeTable else {'transpose': 'false'})
+        base_js =  string.Template(base_js).safe_substitute({'chartType': "'" + chartType + "'"})
         return base_js
 

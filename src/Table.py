@@ -24,7 +24,7 @@ class Table:
         return html
     def readFromCSV(self, fpath, scale=1.0):
         with open(fpath) as f:
-            tablereader = csv.reader(f)
+            tablereader = csv.reader(filter(lambda row: row[0]!='#', f))
             for row in tablereader:
                 tr = TableRow()
                 for elt in row:

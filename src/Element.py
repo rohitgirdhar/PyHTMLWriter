@@ -9,15 +9,12 @@ class Element:
     def __init__(self, htmlCode = ""):
         self.htmlCode = htmlCode
         self.isHeader = False
-        self.drawCheck = False
-        self.drawUnCheck = False
+        self.drawBorderColor = ''
 
     def imgToHTML(self, img_path, width = 200, overlay_path=None):
         res = '<img src="' + img_path.strip().lstrip() + '" width="' + str(width) + 'px" '
-        if self.drawCheck:
-            res += 'style="border: 10px solid green" '
-        if self.drawUnCheck:
-            res += 'style="border: 10px solid red" '
+        if self.drawBorderColor:
+            res += 'style="border: 10px solid ' + self.drawBorderColor + '" '
         if overlay_path:
           res += 'onmouseover="this.src=\'' + overlay_path.strip().lstrip() + '\';"'
           res += 'onmouseout="this.src=\'' + img_path.strip().lstrip() + '\';"'
@@ -45,8 +42,8 @@ class Element:
         for i in range(len(bboxes)):
             bboxes[i] = [bboxes[i][0] * ratioX, bboxes[i][1] * ratioY, bboxes[i][2] * ratioX, bboxes[i][3] * ratioY]
         colStr = ''
-        if self.drawCheck or self.drawUnCheck:
-            col = 'green' if self.drawCheck else 'red'
+        if self.drawBorderColor:
+            col = self.drawBorderColor
             colStr = 'border: 10px solid ' + col + ';'
         htmlCode = """
             <canvas id=""" + idd + """ style="border:1px solid #d3d3d3; """ + colStr + """
@@ -91,10 +88,13 @@ class Element:
         self.isHeader = True
 
     def setDrawCheck(self):
-        self.drawCheck = True
+        self.drawBorderColor = 'green'
     
     def setDrawUnCheck(self):
-        self.drawUnCheck = True
+        self.drawBorderColor = 'red'
+
+    def setDrawBorderColor(self, color):
+        self.drawBorderColor = color
 
     @staticmethod
     def getImSize(impath):

@@ -1,6 +1,7 @@
 import os
 from Table import Table
 import errno
+import math
 
 class TableWriter:
     def __init__(self, table, outputdir, rowsPerPage = 20, pgListBreak = 20, makeChart = False, desc='', transposeTableForChart=False, chartType='line', chartHeight=650):
@@ -21,7 +22,7 @@ class TableWriter:
             rowsSubset = self.table.rows[i : i + self.rowsPerPage]
             t = Table(self.table.headerRows + rowsSubset)
             f = open(os.path.join(self.outputdir, str(pgCounter) + '.html'), 'w')
-            pgLinks = self.getPageLinks(nRows / self.rowsPerPage + 1, 
+            pgLinks = self.getPageLinks(int(math.ceil(nRows * 1.0 / self.rowsPerPage)),
                     pgCounter, self.pgListBreak)
             
             f.write(pgLinks)

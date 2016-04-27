@@ -64,8 +64,98 @@ class Element:
         </script>
         """
         return htmlCode
-    
-    def addImg(self, img_path, width = 200, bboxes=None, imsize=None, overlay_path=None):
+
+    def imgToPosesHTML_SVG(self, img_path, poses, scale):
+      ## TODO: THIS CODE IS BROKEN, maybe fix in the future (SVG is probably lighter than drawing with JS)
+      connected = [[1, 2], [2, 3], # right leg
+                   [11, 12], [12, 13], # right arm
+                   [8, 13], # thorax - right arm
+                   [3, 7], # right hip    - pelvis
+                   [14, 15], [15, 16], # left arm
+                   [8, 14], # thorax - left arm
+                   [4, 5], [5, 6], # left leg
+                   [4, 7], # left hip    - pelvis
+                   [7, 8], # pelvis      - thorax
+                   [8, 9], # thorax      - upper neck
+                   [9, 10]] # upper neck - head 
+      colors = ['red', 'red', # ... % right leg
+                'red', 'red', # ... % right arm
+                'red', # ... % thorax - right arm
+                'red', # ... % right hip - pelvis
+                'green', 'green', # ... % left arm
+                'green', # ... % thorax - left arm
+                'green', 'green', # ... % left leg
+                'green', # ... % left hip - pelvis
+                'yellow', # ... % pelvis - thorax
+                'yellow', # ... % thorax - upper neck
+                'yellow'] # % upper neck head
+      htmlCode = '<div style="position: relative;"><img src="' + img_path + '" style="width:' + str(int(scale * 100)) + '%" /><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="position:absolute; left:0px; top:0px;"> <!-- <image xlink:href="' + img_path + '"  width="' + str(scale * 100) + '%" height="' + str(scale * 100) + '%" x=0 y=0 /> -->'
+      for pose in poses:
+        for cid, con in enumerate(connected):
+          htmlCode += '<line x1="' + str(scale*pose[con[0]-1][0]) + '" y1="' + str(scale*pose[con[0]-1][1]) + '" x2="' + str(scale*pose[con[1]-1][0]) + '" y2="' + str(scale*pose[con[1]-1][1]) + '" stroke="' + colors[cid] + '" stroke-width="1" />'
+      htmlCode += '</svg></div>'
+      return htmlCode
+
+    def imgToPosesHTML(self, img_path, poses, wid=300, ht=300, imsize = None):
+      idd = "img_" + ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
+
+      # compute the ratios
+      if imsize:
+          actW = imsize[0]
+          actH = imsize[1]
+      else:
+          actW, actH = self.tryComputeImgDim(img_path)
+      actW = float(actW)
+      actH = float(actH)
+      if actW > actH:
+          ht = wid * (actH / actW)
+      else:
+          wid = ht * (actW / actH)
+      ratioX = wid / actW
+      ratioY = ht / actH
+
+      connected = [[1, 2], [2, 3], # right leg
+                   [11, 12], [12, 13], # right arm
+                   [8, 13], # thorax - right arm
+                   [3, 7], # right hip    - pelvis
+                   [14, 15], [15, 16], # left arm
+                   [8, 14], # thorax - left arm
+                   [4, 5], [5, 6], # left leg
+                   [4, 7], # left hip    - pelvis
+                   [7, 8], # pelvis      - thorax
+                   [8, 9], # thorax      - upper neck
+                   [9, 10]] # upper neck - head 
+      colors = ['red', 'red', # ... % right leg
+                'red', 'red', # ... % right arm
+                'red', # ... % thorax - right arm
+                'red', # ... % right hip - pelvis
+                'green', 'green', # ... % left arm
+                'green', # ... % thorax - left arm
+                'green', 'green', # ... % left leg
+                'green', # ... % left hip - pelvis
+                'yellow', # ... % pelvis - thorax
+                'yellow', # ... % thorax - upper neck
+                'yellow'] # % upper neck head
+
+      htmlCode = """
+            <canvas id=""" + idd + """ style="border:1px solid #d3d3d3;
+                background-image: url(""" + img_path + """);
+                background-repeat: no-repeat;
+                background-size: contain;"
+                width=""" + str(wid) + """
+                height=""" + str(ht) + """>
+           </canvas>
+           <script>
+                var c = document.getElementById(\"""" + idd + """\");
+                var ctx = c.getContext(\"2d\");
+                ctx.lineWidth="2";"""
+      for pose in poses:
+        for cid,con in enumerate(connected):
+          htmlCode += 'ctx.strokeStyle="' + colors[cid] + '"; ctx.beginPath(); ctx.moveTo(' + str(pose[con[0]-1][0]*ratioX) + ',' + str(pose[con[0]-1][1]*ratioY) + '); ctx.lineTo(' + str(pose[con[1]-1][0]*ratioX) + ',' + str(pose[con[1]-1][1]*ratioY) + '); ctx.stroke();'
+        htmlCode += '</script>'
+        return htmlCode
+
+    def addImg(self, img_path, width = 200, bboxes=None, imsize=None, overlay_path=None, poses=None, scale=None):
         # bboxes must be a list of [x,y,w,h] (i.e. a list of lists)
         # imsize is the natural size of image at img_path.. used for putting bboxes, not required otherwise
         # even if it's not provided, I'll try to figure it out -- using the typical use cases of this software
@@ -73,6 +163,8 @@ class Element:
         if bboxes:
             # TODO overlay path not implemented yet for canvas image
             self.htmlCode += self.imgToBboxHTML(img_path, bboxes, 'green', width, width, imsize)
+        elif poses:
+            self.htmlCode += self.imgToPosesHTML(img_path, poses, width, width, imsize)
         else:
             self.htmlCode += self.imgToHTML(img_path, width, overlay_path)
 

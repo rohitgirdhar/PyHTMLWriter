@@ -96,7 +96,7 @@ class Element:
       htmlCode += '</svg></div>'
       return htmlCode
 
-    def imgToPosesHTML(self, img_path, poses, wid=300, ht=300, imsize = None):
+    def imgToPosesHTML(self, img_path, poses, wid=300, ht=300, imsize = None, overlay_path = None):
       idd = "img_" + ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
 
       # compute the ratios
@@ -137,14 +137,7 @@ class Element:
                 'yellow', # ... % thorax - upper neck
                 'yellow'] # % upper neck head
 
-      htmlCode = """
-            <canvas id=""" + idd + """ style="border:1px solid #d3d3d3;
-                background-image: url(""" + img_path + """);
-                background-repeat: no-repeat;
-                background-size: contain;"
-                width=""" + str(wid) + """
-                height=""" + str(ht) + """>
-           </canvas>
+      htmlCode = '<canvas id=' + idd + ' style="border:1px solid #d33d3; background-image: url(' + img_path + '); background-repeat: no-repeat; background-size: contain;" width="' + str(wid) + 'px" height="' + str(ht) + 'px" onMouseOver="this.style.backgroundImage=\'url(' + overlay_path + ')\'" onMouseOut="this.style.backgroundImage =\'url(' + img_path + ')\'"></canvas>' + """
            <script>
                 var c = document.getElementById(\"""" + idd + """\");
                 var ctx = c.getContext(\"2d\");
@@ -164,7 +157,7 @@ class Element:
             # TODO overlay path not implemented yet for canvas image
             self.htmlCode += self.imgToBboxHTML(img_path, bboxes, 'green', width, width, imsize)
         elif poses:
-            self.htmlCode += self.imgToPosesHTML(img_path, poses, width, width, imsize)
+            self.htmlCode += self.imgToPosesHTML(img_path, poses, width, width, imsize, overlay_path)
         else:
             self.htmlCode += self.imgToHTML(img_path, width, overlay_path)
 

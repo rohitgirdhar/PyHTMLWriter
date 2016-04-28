@@ -137,7 +137,11 @@ class Element:
                 'yellow', # ... % thorax - upper neck
                 'yellow'] # % upper neck head
 
-      htmlCode = '<canvas id=' + idd + ' style="border:1px solid #d33d3; background-image: url(' + img_path + '); background-repeat: no-repeat; background-size: contain;" width="' + str(wid) + 'px" height="' + str(ht) + 'px" onMouseOver="this.style.backgroundImage=\'url(' + overlay_path + ')\'" onMouseOut="this.style.backgroundImage =\'url(' + img_path + ')\'"></canvas>' + """
+      htmlCode = '<canvas id=' + idd + ' style="border:1px solid #d33d3; background-image: url(' + img_path + '); background-repeat: no-repeat; background-size: contain;" width="' + str(wid) + 'px" height="' + str(ht) + 'px"'
+      if overlay_path:
+        htmlCode += ' onMouseOver="this.style.backgroundImage=\'url(' + overlay_path + ')\'" onMouseOut="this.style.backgroundImage =\'url(' + img_path + ')\'"'
+      htmlCode += ' ></canvas>' 
+      htmlCode += """
            <script>
                 var c = document.getElementById(\"""" + idd + """\");
                 var ctx = c.getContext(\"2d\");

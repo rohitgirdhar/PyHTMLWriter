@@ -145,8 +145,8 @@ class Element:
       for pose in poses:
         for cid,con in enumerate(connected):
           htmlCode += 'ctx.strokeStyle="' + colors[cid] + '"; ctx.beginPath(); ctx.moveTo(' + str(pose[con[0]-1][0]*ratioX) + ',' + str(pose[con[0]-1][1]*ratioY) + '); ctx.lineTo(' + str(pose[con[1]-1][0]*ratioX) + ',' + str(pose[con[1]-1][1]*ratioY) + '); ctx.stroke();'
-        htmlCode += '</script>'
-        return htmlCode
+      htmlCode += '</script>'
+      return htmlCode
 
     def addImg(self, img_path, width = 200, bboxes=None, imsize=None, overlay_path=None, poses=None, scale=None):
         # bboxes must be a list of [x,y,w,h] (i.e. a list of lists)

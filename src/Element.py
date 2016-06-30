@@ -21,6 +21,14 @@ class Element:
         res += '/>'
         return res
 
+    def vidToHTML(self, vid_path):
+        res = '''
+            <video width="320" height="240" controls>
+                <source src="%s" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>''' % vid_path
+        return res
+
     def imgToBboxHTML(self, img_path, bboxes, col='green', wid=300, ht=300, imsize = None):
         idd = "img_" + ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
 
@@ -164,6 +172,9 @@ class Element:
             self.htmlCode += self.imgToPosesHTML(img_path, poses, width, width, imsize, overlay_path)
         else:
             self.htmlCode += self.imgToHTML(img_path, width, overlay_path)
+
+    def addVideo(self, vid_path):
+        self.htmlCode += self.vidToHTML(vid_path)
 
     def addTxt(self, txt):
         if self.htmlCode: # not empty

@@ -21,12 +21,12 @@ class Element:
         res += '/>'
         return res
 
-    def vidToHTML(self, vid_path):
+    def vidToHTML(self, vid_path, width=320):
         res = '''
-            <video width="320" height="240" controls>
+            <video width="%d" controls>
                 <source src="%s" type="video/mp4">
                 Your browser does not support the video tag.
-            </video>''' % vid_path
+            </video>''' % (width, vid_path)
         return res
 
     def imgToBboxHTML(self, img_path, bboxes, col='green', wid=300, ht=300, imsize = None):

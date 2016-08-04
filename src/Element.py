@@ -181,6 +181,10 @@ class Element:
                 self.htmlCode += '<br />'
         self.htmlCode += str(txt)
 
+    def addLink(self, url):
+        self.htmlCode = '<a href="%s">%s</a>' % (url, self.htmlCode)
+
+
     def getHTML(self):
         return self.htmlCode
 

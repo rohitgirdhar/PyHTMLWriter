@@ -15,16 +15,20 @@ class TableWriter:
         self.chartType = chartType # used in genCharts
         self.chartHeight = chartHeight
     def write(self):
+        # returns a list with each element as (link to table
+        # row, row)
+        ret_data = []
         self.mkdir_p(self.outputdir)
         nRows = self.table.countRows()
         pgCounter = 1
         for i in range(0, nRows, self.rowsPerPage):
             rowsSubset = self.table.rows[i : i + self.rowsPerPage]
             t = Table(self.table.headerRows + rowsSubset)
+            ret_data.append((pgCounter, rowsSubset))
             f = open(os.path.join(self.outputdir, str(pgCounter) + '.html'), 'w')
             pgLinks = self.getPageLinks(int(math.ceil(nRows * 1.0 / self.rowsPerPage)),
                     pgCounter, self.pgListBreak)
-            
+
             f.write(pgLinks)
             f.write('<p>' + self.desc + '</p>')
             f.write(t.getHTML(makeChart = self.makeChart, transposeTableForChart=self.transposeTableForChart, chartType = self.chartType, chartHeight = self.chartHeight))
@@ -32,6 +36,7 @@ class TableWriter:
             f.write(self.getCredits())
             f.close()
             pgCounter += 1
+        return ret_data
     @staticmethod
     def mkdir_p(path):
         try:

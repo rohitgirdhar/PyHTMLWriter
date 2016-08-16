@@ -14,7 +14,7 @@ class TableWriter:
         self.transposeTableForChart = transposeTableForChart  # used in genCharts
         self.chartType = chartType # used in genCharts
         self.chartHeight = chartHeight
-    def write(self):
+    def write(self, writePgLinks=True):
         # returns a list with each element as (link to table
         # row, row)
         ret_data = []
@@ -28,11 +28,12 @@ class TableWriter:
             f = open(os.path.join(self.outputdir, str(pgCounter) + '.html'), 'w')
             pgLinks = self.getPageLinks(int(math.ceil(nRows * 1.0 / self.rowsPerPage)),
                     pgCounter, self.pgListBreak)
-
-            f.write(pgLinks)
+            if writePgLinks:
+                f.write(pgLinks)
             f.write('<p>' + self.desc + '</p>')
             f.write(t.getHTML(makeChart = self.makeChart, transposeTableForChart=self.transposeTableForChart, chartType = self.chartType, chartHeight = self.chartHeight))
-            f.write(pgLinks)
+            if writePgLinks:
+                f.write(pgLinks)
             f.write(self.getCredits())
             f.close()
             pgCounter += 1

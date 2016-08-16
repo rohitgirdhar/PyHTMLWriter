@@ -26,6 +26,7 @@ class TableWriter:
             t = Table(self.table.headerRows + rowsSubset)
             ret_data.append((pgCounter, rowsSubset))
             f = open(os.path.join(self.outputdir, str(pgCounter) + '.html'), 'w')
+            f.write('<head><script src="http://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script></head>\n')
             pgLinks = self.getPageLinks(int(math.ceil(nRows * 1.0 / self.rowsPerPage)),
                     pgCounter, self.pgListBreak)
             if writePgLinks:

@@ -15,7 +15,7 @@ class Table:
         else:
             self.headerRows.append(row)
     def getHTML(self, makeChart = False, transposeTableForChart = False, chartType = 'line', chartHeight = 650):
-        html = '<table border=1 id="data">'
+        html = '<table border=1 id="data" class="sortable">'
         for r in self.headerRows + self.rows:
             html += r.getHTML()
         html += '</table>'

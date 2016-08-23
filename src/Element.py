@@ -6,10 +6,10 @@ import io
 
 class Element:
     """ A data element of a row in a table """
-    def __init__(self, htmlCode = ""):
+    def __init__(self, htmlCode = "", drawBorderColor=''):
         self.htmlCode = htmlCode
         self.isHeader = False
-        self.drawBorderColor = ''
+        self.drawBorderColor = drawBorderColor
 
     def imgToHTML(self, img_path, width = 200, overlay_path=None):
         res = '<img src="' + img_path.strip().lstrip() + '" width="' + str(width) + 'px" '
@@ -85,7 +85,7 @@ class Element:
                    [4, 7], # left hip    - pelvis
                    [7, 8], # pelvis      - thorax
                    [8, 9], # thorax      - upper neck
-                   [9, 10]] # upper neck - head 
+                   [9, 10]] # upper neck - head
       colors = ['red', 'red', # ... % right leg
                 'red', 'red', # ... % right arm
                 'red', # ... % thorax - right arm
@@ -132,7 +132,7 @@ class Element:
                    [4, 7], # left hip    - pelvis
                    [7, 8], # pelvis      - thorax
                    [8, 9], # thorax      - upper neck
-                   [9, 10]] # upper neck - head 
+                   [9, 10]] # upper neck - head
       colors = ['red', 'red', # ... % right leg
                 'red', 'red', # ... % right arm
                 'red', # ... % thorax - right arm
@@ -148,7 +148,7 @@ class Element:
       htmlCode = '<canvas id=' + idd + ' style="border:1px solid #d33d3; background-image: url(' + img_path + '); background-repeat: no-repeat; background-size: contain;" width="' + str(wid) + 'px" height="' + str(ht) + 'px"'
       if overlay_path:
         htmlCode += ' onMouseOver="this.style.backgroundImage=\'url(' + overlay_path + ')\'" onMouseOut="this.style.backgroundImage =\'url(' + img_path + ')\'"'
-      htmlCode += ' ></canvas>' 
+      htmlCode += ' ></canvas>'
       htmlCode += """
            <script>
                 var c = document.getElementById(\"""" + idd + """\");
@@ -193,7 +193,7 @@ class Element:
 
     def setDrawCheck(self):
         self.drawBorderColor = 'green'
-    
+
     def setDrawUnCheck(self):
         self.drawBorderColor = 'red'
 

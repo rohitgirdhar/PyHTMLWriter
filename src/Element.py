@@ -3,6 +3,7 @@ import string
 from PIL import Image
 import urllib2 as urllib
 import io
+import uuid
 
 class Element:
     """ A data element of a row in a table """
@@ -21,12 +22,37 @@ class Element:
         res += '/>'
         return res
 
+    def imgsToSlideShow(self, img_paths):
+      uid = str(uuid.uuid4().fields[-1])[:5]
+      res = '<div class="%s" style="position:relative; width:400px; height:300px">\n' % uid
+      for img_path in img_paths:
+        res += '<img src="%s" style="position:absolute; left:0; top:0;">\n' % img_path
+      res += '</div>'
+      res += """
+        <script>
+        $(function(){
+          $('.%s img:gt(0)').hide();
+          setInterval(function(){
+            $('.%s :first-child').fadeOut()
+              .next('img').fadeIn()
+              .end().appendTo('.%s');}, 
+            200);
+        });
+        </script>\n""" % (uid, uid, uid)
+      # res += """
+      #   <style>
+      #     .%s { position:relative; width:200px; }
+      #     .%s img { position:absolute; left:0; top:0; }
+      #   </style>\n""" % (uid, uid)
+      return res
+
     def vidToHTML(self, vid_path, width=320):
+        vid_type='mp4'
         res = '''
             <video width="%d" controls>
-                <source src="%s" type="video/mp4">
+                <source src="%s" type="video/%s">
                 Your browser does not support the video tag.
-            </video>''' % (width, vid_path)
+            </video>''' % (width, vid_path, vid_type)
         return res
 
     def imgToBboxHTML(self, img_path, bboxes, col='green', wid=300, ht=300, imsize = None):
@@ -175,6 +201,10 @@ class Element:
 
     def addVideo(self, vid_path):
         self.htmlCode += self.vidToHTML(vid_path)
+
+    def addSlideShow(self, img_paths):
+        # img_paths is a list of URLs
+        self.htmlCode += self.imgsToSlideShow(img_paths)
 
     def addTxt(self, txt):
         if self.htmlCode: # not empty

@@ -26,7 +26,10 @@ class TableWriter:
             t = Table(self.table.headerRows + rowsSubset)
             ret_data.append((pgCounter, rowsSubset))
             f = open(os.path.join(self.outputdir, str(pgCounter) + '.html'), 'w')
-            f.write('<head><script src="http://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script></head>\n')
+            f.write('<head>')
+            f.write('<script src="http://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>\n')
+            f.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>\n')
+            f.write('</head>')
             pgLinks = self.getPageLinks(int(math.ceil(nRows * 1.0 / self.rowsPerPage)),
                     pgCounter, self.pgListBreak)
             if writePgLinks:
@@ -63,3 +66,4 @@ class TableWriter:
     @staticmethod
     def getCredits():
         return '\n<br/><div align="center"><small>Generated using <a href="https://github.com/rohitgirdhar/PyHTMLWriter">PyHTMLWriter</a></small></div>'
+ 

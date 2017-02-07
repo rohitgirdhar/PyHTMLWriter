@@ -24,9 +24,9 @@ class Element:
 
     def imgsToSlideShow(self, img_paths):
       uid = str(uuid.uuid4().fields[-1])[:5]
-      res = '<div class="%s" style="position:relative; width:400px; height:300px">\n' % uid
+      res = '<div class="%s" style="position:relative; width:400px; height:400px">\n' % uid
       for img_path in img_paths:
-        res += '<img src="%s" style="position:absolute; left:0; top:0;">\n' % img_path
+        res += '<img src="%s" style="position:absolute; left:0; top:0; width:400px">\n' % img_path
       res += '</div>'
       res += """
         <script>
@@ -39,11 +39,6 @@ class Element:
             200);
         });
         </script>\n""" % (uid, uid, uid)
-      # res += """
-      #   <style>
-      #     .%s { position:relative; width:200px; }
-      #     .%s img { position:absolute; left:0; top:0; }
-      #   </style>\n""" % (uid, uid)
       return res
 
     def vidToHTML(self, vid_path, width=320):

@@ -28,7 +28,7 @@ class Element:
         res += '/>'
         return res
 
-    def imgsToSlideShow(self, img_paths, **kwargs):
+    def imgsToSlideShow_v1(self, img_paths, **kwargs):
       uid = str(uuid.uuid4().fields[-1])[:5]
       res = '<div class="%s" style="position:relative; width:400px; height:400px">\n' % uid
       for img_path in img_paths:
@@ -48,6 +48,45 @@ class Element:
         });
         </script>\n""" % (uid, uid, uid)
       return res
+
+    def imgsToSlideShow(self, img_paths, **kwargs):
+      if 'poses' not in locals():
+        poses = []
+      # currently only supported kwarg is poses
+      uid = 'x_' + str(uuid.uuid4().fields[-1])[:5]
+      html = ''
+      html += '<canvas id="%s" width="400px" height="400px"></canvas>\n' % uid
+      html += '<script>'
+      html += """
+          var {0}_current = 0;
+          function {0}_animate(canvas, context, frames, poses) {{
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            var base_image = new Image();
+            base_image.src = frames[{0}_current];
+            base_image.onload = function() {{
+              context.drawImage(base_image, 0, 0);
+            }};
+            {0}_current = ++{0}_current % frames.length;
+            setTimeout(function() {{
+              {0}_animate(canvas, context, frames, poses);
+            }}, 300);
+          }}
+      """.format(uid)
+      html += """
+        var {0}_canvas = document.getElementById('{0}');
+        var {0}_context = {0}_canvas.getContext('2d');
+        var {0}_frames = {1};
+        var {0}_poses = {2};
+        """.format(
+          uid,
+          '[' + ','.join(['"' + el + '"' for el in img_paths]) + ']',
+          '[' + ','.join(['[' + ','.join([str(e) for e in el]) + ']' for el in poses]) + ']'
+        )
+      html += """
+        {0}_animate({0}_canvas, {0}_context, {0}_frames, {0}_poses);
+      """.format(uid)
+      html += """</script>"""
+      return html
 
     def vidToHTML(self, vid_path, width=320):
         vid_type='mp4'

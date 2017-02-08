@@ -50,26 +50,64 @@ class Element:
       return res
 
     def imgsToSlideShow(self, img_paths, **kwargs):
-      if 'poses' not in locals():
-        poses = []
+      poses = kwargs['poses'] if 'poses' in kwargs else []
       # currently only supported kwarg is poses
       uid = 'x_' + str(uuid.uuid4().fields[-1])[:5]
       html = ''
       html += '<canvas id="%s" width="400px" height="400px"></canvas>\n' % uid
       html += '<script>'
       html += """
+          parts = [
+            [2, 3],
+            [2, 6],
+            [3, 4],
+            [4, 5],
+            [6, 7],
+            [7, 8],
+            [2, 9],
+            [9, 10], 
+            [10, 11], 
+            [2, 12], 
+            [12, 13], 
+            [13, 14], 
+            [2, 1],
+            [1, 15], 
+            [15, 17], 
+            [1, 16], 
+            [16, 18], 
+            [3, 17],
+          ];
           var {0}_current = 0;
+          function drawPose(poses, ctx) {{
+            ctx.strokeStyle="red";
+            ctx.lineWidth = "2";
+            ctx.beginPath();
+            for (body_id=0; body_id < poses.length; body_id++) {{
+              for (part_id=0; part_id < parts.length; part_id++) {{
+                if (poses[body_id][parts[part_id][0]-1][2] < 0.1 ||
+                    poses[body_id][parts[part_id][1]-1][2] < 0.1) {{
+                  continue;
+                }}
+                ctx.moveTo(poses[body_id][parts[part_id][0]-1][0],
+                  poses[body_id][parts[part_id][0]-1][1]);
+                ctx.lineTo(poses[body_id][parts[part_id][1]-1][0],
+                  poses[body_id][parts[part_id][1]-1][1]);
+                ctx.stroke();
+              }}
+            }}
+          }}
           function {0}_animate(canvas, context, frames, poses) {{
             context.clearRect(0, 0, canvas.width, canvas.height);
             var base_image = new Image();
             base_image.src = frames[{0}_current];
             base_image.onload = function() {{
               context.drawImage(base_image, 0, 0);
+              drawPose(poses[{0}_current], context);
             }};
             {0}_current = ++{0}_current % frames.length;
             setTimeout(function() {{
               {0}_animate(canvas, context, frames, poses);
-            }}, 300);
+            }}, 600);
           }}
       """.format(uid)
       html += """
@@ -80,7 +118,7 @@ class Element:
         """.format(
           uid,
           '[' + ','.join(['"' + el + '"' for el in img_paths]) + ']',
-          '[' + ','.join(['[' + ','.join([str(e) for e in el]) + ']' for el in poses]) + ']'
+          str(poses)
         )
       html += """
         {0}_animate({0}_canvas, {0}_context, {0}_frames, {0}_poses);

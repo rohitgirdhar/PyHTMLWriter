@@ -77,17 +77,37 @@ class Element:
             [16, 18], 
             [3, 17],
           ];
+          colors = [
+            'rgb(255, 0, 0)',
+            'rgb(255, 85, 0)',
+            'rgb(255, 170, 0)',
+            'rgb(255, 255, 0)',
+            'rgb(170, 255, 0)',
+            'rgb(85, 255, 0)',
+            'rgb(0, 255, 0)',
+            'rgb(0, 255, 85)',
+            'rgb(0, 255, 170)',
+            'rgb(0, 255, 255)',
+            'rgb(0, 170, 255)',
+            'rgb(0, 85, 255)',
+            'rgb(0, 0, 255)',
+            'rgb(85, 0, 255)',
+            'rgb(170, 0, 255)',
+            'rgb(255, 0, 255)',
+            'rgb(255, 0, 170)',
+            'rgb(255, 0, 85)',
+          ];
           var {0}_current = 0;
           function drawPose(poses, ctx) {{
-            ctx.strokeStyle="red";
             ctx.lineWidth = "2";
-            ctx.beginPath();
             for (body_id=0; body_id < poses.length; body_id++) {{
               for (part_id=0; part_id < parts.length; part_id++) {{
                 if (poses[body_id][parts[part_id][0]-1][2] < 0.1 ||
                     poses[body_id][parts[part_id][1]-1][2] < 0.1) {{
                   continue;
                 }}
+                ctx.beginPath();
+                ctx.strokeStyle = colors[part_id];
                 ctx.moveTo(poses[body_id][parts[part_id][0]-1][0],
                   poses[body_id][parts[part_id][0]-1][1]);
                 ctx.lineTo(poses[body_id][parts[part_id][1]-1][0],

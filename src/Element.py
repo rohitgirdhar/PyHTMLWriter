@@ -12,21 +12,29 @@ class Element:
         self.isHeader = False
         self.drawBorderColor = drawBorderColor
 
+    # def imgToHTML(self, img_path, width = 200, overlay_path=None):
+    #     res = '<img src="' + img_path.strip().lstrip() + '" width="' + str(width) + 'px" '
+    #     if self.drawBorderColor:
+    #         res += 'style="border: 10px solid ' + self.drawBorderColor + '" '
+    #     if overlay_path:
+    #       res += 'onmouseover="this.src=\'' + overlay_path.strip().lstrip() + '\';"'
+    #       res += 'onmouseout="this.src=\'' + img_path.strip().lstrip() + '\';"'
+    #     res += '/>'
+    #     return res
+    
     def imgToHTML(self, img_path, width = 200, overlay_path=None):
         res = '<img src="' + img_path.strip().lstrip() + '" width="' + str(width) + 'px" '
-        if self.drawBorderColor:
-            res += 'style="border: 10px solid ' + self.drawBorderColor + '" '
-        if overlay_path:
-          res += 'onmouseover="this.src=\'' + overlay_path.strip().lstrip() + '\';"'
-          res += 'onmouseout="this.src=\'' + img_path.strip().lstrip() + '\';"'
+        res += ' style="position: absolute; left:0; right:0" '
         res += '/>'
         return res
 
-    def imgsToSlideShow(self, img_paths):
+    def imgsToSlideShow(self, img_paths, **kwargs):
       uid = str(uuid.uuid4().fields[-1])[:5]
       res = '<div class="%s" style="position:relative; width:400px; height:400px">\n' % uid
       for img_path in img_paths:
-        res += '<img src="%s" style="position:absolute; left:0; top:0; width:400px">\n' % img_path
+        # res += '<img src="%s" style="position:absolute; left:0; top:0; width:400px">\n' % img_path
+        kwargs['width'] = 400
+        res += self.imgToHTML_base(img_path, **kwargs)
       res += '</div>'
       res += """
         <script>
@@ -34,7 +42,7 @@ class Element:
           $('.%s img:gt(0)').hide();
           setInterval(function(){
             $('.%s :first-child').fadeOut()
-              .next('img').fadeIn()
+              .next().fadeIn()
               .end().appendTo('.%s');}, 
             200);
         });
@@ -181,25 +189,28 @@ class Element:
       htmlCode += '</script>'
       return htmlCode
 
-    def addImg(self, img_path, width = 200, bboxes=None, imsize=None, overlay_path=None, poses=None, scale=None):
+    def addImg(self, img_path, **kwargs):
+      self.htmlCode += self.imgToHTML_base(img_path, **kwargs)
+
+    def imgToHTML_base(self, img_path, width = 200, bboxes=None, imsize=None, overlay_path=None, poses=None, scale=None):
         # bboxes must be a list of [x,y,w,h] (i.e. a list of lists)
         # imsize is the natural size of image at img_path.. used for putting bboxes, not required otherwise
         # even if it's not provided, I'll try to figure it out -- using the typical use cases of this software
         # overlay_path is image I want to show on mouseover
         if bboxes:
             # TODO overlay path not implemented yet for canvas image
-            self.htmlCode += self.imgToBboxHTML(img_path, bboxes, 'green', width, width, imsize)
+            return self.imgToBboxHTML(img_path, bboxes, 'green', width, width, imsize)
         elif poses:
-            self.htmlCode += self.imgToPosesHTML(img_path, poses, width, width, imsize, overlay_path)
+            return self.imgToPosesHTML(img_path, poses, width, width, imsize, overlay_path)
         else:
-            self.htmlCode += self.imgToHTML(img_path, width, overlay_path)
+            return self.imgToHTML(img_path, width, overlay_path)
 
     def addVideo(self, vid_path):
         self.htmlCode += self.vidToHTML(vid_path)
 
-    def addSlideShow(self, img_paths):
+    def addSlideShow(self, img_paths, **kwargs):
         # img_paths is a list of URLs
-        self.htmlCode += self.imgsToSlideShow(img_paths)
+        self.htmlCode += self.imgsToSlideShow(img_paths, **kwargs)
 
     def addTxt(self, txt):
         if self.htmlCode: # not empty

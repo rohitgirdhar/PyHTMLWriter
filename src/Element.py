@@ -12,22 +12,16 @@ class Element:
         self.isHeader = False
         self.drawBorderColor = drawBorderColor
 
-    # def imgToHTML(self, img_path, width = 200, overlay_path=None):
-    #     res = '<img src="' + img_path.strip().lstrip() + '" width="' + str(width) + 'px" '
-    #     if self.drawBorderColor:
-    #         res += 'style="border: 10px solid ' + self.drawBorderColor + '" '
-    #     if overlay_path:
-    #       res += 'onmouseover="this.src=\'' + overlay_path.strip().lstrip() + '\';"'
-    #       res += 'onmouseout="this.src=\'' + img_path.strip().lstrip() + '\';"'
-    #     res += '/>'
-    #     return res
-    
     def imgToHTML(self, img_path, width = 200, overlay_path=None):
         res = '<img src="' + img_path.strip().lstrip() + '" width="' + str(width) + 'px" '
-        res += ' style="position: absolute; left:0; right:0" '
+        if self.drawBorderColor:
+            res += 'style="border: 10px solid ' + self.drawBorderColor + '" '
+        if overlay_path:
+          res += 'onmouseover="this.src=\'' + overlay_path.strip().lstrip() + '\';"'
+          res += 'onmouseout="this.src=\'' + img_path.strip().lstrip() + '\';"'
         res += '/>'
         return res
-
+    
     def imgsToSlideShow_v1(self, img_paths, **kwargs):
       uid = str(uuid.uuid4().fields[-1])[:5]
       res = '<div class="%s" style="position:relative; width:400px; height:400px">\n' % uid

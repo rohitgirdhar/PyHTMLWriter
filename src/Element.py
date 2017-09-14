@@ -21,7 +21,7 @@ class Element:
           res += 'onmouseout="this.src=\'' + img_path.strip().lstrip() + '\';"'
         res += '/>'
         return res
-    
+
     def imgsToSlideShow_v1(self, img_paths, **kwargs):
       uid = str(uuid.uuid4().fields[-1])[:5]
       res = '<div class="%s" style="position:relative; width:400px; height:400px">\n' % uid
@@ -37,7 +37,7 @@ class Element:
           setInterval(function(){
             $('.%s :first-child').fadeOut()
               .next().fadeIn()
-              .end().appendTo('.%s');}, 
+              .end().appendTo('.%s');},
             200);
         });
         </script>\n""" % (uid, uid, uid)
@@ -48,7 +48,12 @@ class Element:
       # currently only supported kwarg is poses
       uid = 'x_' + str(uuid.uuid4().fields[-1])[:5]
       html = ''
-      html += '<canvas id="%s" width="400px" height="400px"></canvas>\n' % uid
+      if 'width' not in kwargs:
+        kwargs['width'] = 400
+      if 'height' not in kwargs:
+        kwargs['height'] = kwargs['width'] / 2
+      html += '<canvas id="{2}" width="{0}px" height="{1}px"></canvas>\n'.format(
+          kwargs['width'], kwargs['height'], uid)
       html += '<script>'
       html += """
           parts = [
@@ -59,16 +64,16 @@ class Element:
             [6, 7],
             [7, 8],
             [2, 9],
-            [9, 10], 
-            [10, 11], 
-            [2, 12], 
-            [12, 13], 
-            [13, 14], 
+            [9, 10],
+            [10, 11],
+            [2, 12],
+            [12, 13],
+            [13, 14],
             [2, 1],
-            [1, 15], 
-            [15, 17], 
-            [1, 16], 
-            [16, 18], 
+            [1, 15],
+            [15, 17],
+            [1, 16],
+            [16, 18],
             [3, 17],
           ];
           colors = [
@@ -115,13 +120,13 @@ class Element:
             var base_image = new Image();
             base_image.src = frames[{0}_current];
             base_image.onload = function() {{
-              context.drawImage(base_image, 0, 0);
+              context.drawImage(base_image, 0, 0, canvas.width, canvas.width / 2);
               drawPose(poses[{0}_current], context);
             }};
             {0}_current = ++{0}_current % frames.length;
             setTimeout(function() {{
               {0}_animate(canvas, context, frames, poses);
-            }}, 600);
+            }}, 60);
           }}
       """.format(uid)
       html += """

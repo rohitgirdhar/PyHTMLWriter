@@ -116,7 +116,7 @@ class Element:
             }}
           }}
           function {0}_animate(canvas, context, frames, poses) {{
-            context.clearRect(0, 0, canvas.width, canvas.height);
+            // context.clearRect(0, 0, canvas.width, canvas.height);
             var base_image = new Image();
             base_image.src = frames[{0}_current];
             base_image.onload = function() {{
@@ -164,6 +164,7 @@ class Element:
         else:
             actW, actH = self.tryComputeImgDim(img_path)
         actW = float(actW)
+
         actH = float(actH)
         if actW > actH:
             ht = wid * (actH / actW)
